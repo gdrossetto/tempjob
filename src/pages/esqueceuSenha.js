@@ -8,37 +8,22 @@ function vh(percentage) {
   return Dimensions.get('window').height * (percentage / 100);
 }
 
-const LoginPage = ({navigation}) => {
+const EsqueceuSenha = () => {
   return (
     <View>
       <Logo style={{marginTop: vh(8), marginBottom: vh(4)}} />
-      <Text style={styles.acessarContaTexto}>ACESSE SUA CONTA</Text>
+      <Text style={styles.acessarContaTexto}>RECUPERAR SENHA</Text>
       <InputTexto
         style={{marginTop: '15%'}}
         label={'E-mail'}
         placeholder={'Digite seu e-mail'}
       />
-      <InputTexto
-        style={{marginTop: '5%'}}
-        label={'Senha'}
-        placeholder={'Digite sua senha'}
-      />
-      <PurpleButton
-        handlePress={() => navigation.navigate('DrawerNavigator')}
-        style={{marginTop: '20%'}}
-        text={'ENTRAR'}
-      />
-      <Text
-        onPress={() => {
-          navigation.navigate('EsqueceuSenha');
-        }}
-        style={styles.esqueceuSenha}>
-        Esqueceu sua senha?
-      </Text>
+
+      <PurpleButton style={{marginTop: '10%'}} text={'RECUPERAR'} />
     </View>
   );
 };
-export default LoginPage;
+export default EsqueceuSenha;
 
 const styles = StyleSheet.create({
   acessarContaTexto: {
