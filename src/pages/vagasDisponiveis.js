@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, Dimensions, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Image,
+  FlatList,
+} from 'react-native';
 import Logo from '../components/logo.component';
 import InputTexto from '../components/input-texto.component';
 import PurpleButton from '../components/purple-button.component';
@@ -7,10 +14,36 @@ import {ScrollView} from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 import {Container, Header, Content, Picker, Form, Icon} from 'native-base';
 import PageHeader from '../components/page-header.component';
+import ItemVaga from '../components/item-vaga';
+
+function vh(percentage) {
+  return Dimensions.get('window').height * (percentage / 100);
+}
+function vw(percentage) {
+  return Dimensions.get('window').width * (percentage / 100);
+}
 
 const VagasDisponiveis = ({navigation}) => {
+  var vagas = [
+    {
+      vaga: 'Motorista de caminhão',
+      nomeEmpresa: 'Ambev',
+      fotoEmpresa: require('../assets/imgs/ambev.png'),
+    },
+    {
+      vaga: 'Motorista de caminhão',
+      nomeEmpresa: 'Grupo Vip',
+      fotoEmpresa: require('../assets/imgs/vip.png'),
+    },
+    {
+      vaga: 'Motorista de caminhão',
+      nomeEmpresa: 'Revelare',
+      fotoEmpresa: require('../assets/imgs/revelare.png'),
+    },
+  ];
+
   return (
-    <View>
+    <ScrollView>
       <PageHeader
         handlePressMenu={() => {
           navigation.openDrawer();
@@ -19,7 +52,47 @@ const VagasDisponiveis = ({navigation}) => {
         hasArrowBack={false}
         navigationPopHandler={() => navigation.pop()}
       />
-    </View>
+      <FlatList
+        style={{marginTop: vh(3)}}
+        horizontal={true}
+        data={vagas}
+        renderItem={({item}) => (
+          <Image
+            style={{
+              height: 64,
+              width: 64,
+              marginHorizontal: 10,
+              borderRadius: 32,
+            }}
+            source={item.fotoEmpresa}></Image>
+        )}
+        keyExtractor={(item) => item.nomeEmpresa}
+      />
+      <Text
+        style={{
+          textAlign: 'center',
+          marginTop: vh(5),
+          fontWeight: 'bold',
+          fontSize: 18,
+        }}>
+        VAGAS DISPONÍVEIS
+      </Text>
+      <FlatList
+        style={{marginTop: vh(3)}}
+        horizontal={false}
+        data={vagas}
+        renderItem={({item}) => (
+          <ItemVaga nomeEmpresa={item.nomeEmpresa} nomeVaga={item.vaga} />
+        )}
+        keyExtractor={(item) => item.nomeEmpresa}
+      />
+    </ScrollView>
   );
 };
 export default VagasDisponiveis;
+
+const styles = StyleSheet.create({
+  notificacoesScroll: {
+    flexDirection: 'row',
+  },
+});

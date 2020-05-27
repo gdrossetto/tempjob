@@ -82,6 +82,7 @@ function CustomDrawerContent(props) {
           flexDirection: 'row',
         }}>
         <Icon
+          onPress={() => props.navigation.closeDrawer()}
           style={{
             marginLeft: vh(2),
             marginRight: 'auto',
