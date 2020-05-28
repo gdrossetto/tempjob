@@ -6,6 +6,7 @@ import PurpleButton from '../components/purple-button.component';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 import {Container, Header, Content, Picker, Form, Icon} from 'native-base';
+
 function vh(percentage) {
   return Dimensions.get('window').height * (percentage / 100);
 }
@@ -35,7 +36,7 @@ const PageHeader = ({
         )}
 
         <View style={styles.logoContainer}>
-          <Logo style={{height: vh(6), width: vw(50), marginTop: vh(3)}} />
+          <Logo style={{height: vh(8), width: vw(50), marginTop: vh(3)}} />
           <Text style={styles.userName}>{userName}</Text>
         </View>
         <TouchableOpacity
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#752d91',
   },
   headerContainer: {
-    height: vh(15),
+    height: vh(16),
     backgroundColor: '#e8e8e8',
     flexDirection: 'row',
   },
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   },
   arrowBack: {
     marginHorizontal: vw(4),
-    marginVertical: vh(3),
+    marginVertical: vh(4),
     fontSize: 28,
   },
   arrowBackFalse: {

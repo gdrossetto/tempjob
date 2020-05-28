@@ -23,12 +23,14 @@ const PurpleButtonTitle = styled.Text`
   text-align: center;
   font-weight: bold;
   margin: 12px;
+  margin-top: auto;
+  margin-bottom: auto;
 `;
 
-const PurpleButton = ({text, handlePress, style}) => {
+const PurpleButton = ({text, handlePress, style, textStyle}) => {
   return (
     <PurpleButtonContainer onPress={handlePress} style={style}>
-      <PurpleButtonTitle>{text}</PurpleButtonTitle>
+      <PurpleButtonTitle style={textStyle}>{text}</PurpleButtonTitle>
     </PurpleButtonContainer>
   );
 };

@@ -29,16 +29,46 @@ const VagasDisponiveis = ({navigation}) => {
       vaga: 'Motorista de caminhão',
       nomeEmpresa: 'Ambev',
       fotoEmpresa: require('../assets/imgs/ambev.png'),
+      descricaoVaga:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in velit mauris. Fusce consectetur lorem eget congue pretium. Vestibulum non nulla sed tortor viverra ullamcorper non quis odio. Nullam eu laoreet mi. Cras luctus enim sit amet tincidunt faucibus. Quisque ut risus eget ex tincidunt consectetur. Etiam ullamcorper quam lorem, facilisis vehicula urna dictum sit amet. Aliquam eu consequat quam. Suspendisse potenti.',
+      cargaHoraria: 'Das 8:30 às 18:00',
+      periodoContratacao: '18/02/2020 - 19/03/2020',
+      escolaridade: 'Médio Completo',
+      documentosObrigatorios: [
+        'RG',
+        'CPF',
+        'Certificado Conclusão Ensino Medio',
+      ],
     },
     {
       vaga: 'Motorista de caminhão',
       nomeEmpresa: 'Grupo Vip',
       fotoEmpresa: require('../assets/imgs/vip.png'),
+      descricaoVaga:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in velit mauris. Fusce consectetur lorem eget congue pretium. Vestibulum non nulla sed tortor viverra ullamcorper non quis odio. Nullam eu laoreet mi. Cras luctus enim sit amet tincidunt faucibus. Quisque ut risus eget ex tincidunt consectetur. Etiam ullamcorper quam lorem, facilisis vehicula urna dictum sit amet. Aliquam eu consequat quam. Suspendisse potenti.',
+      cargaHoraria: 'Das 8:30 às 18:00',
+      periodoContratacao: '18/02/2020 - 19/03/2020',
+      escolaridade: 'Médio Completo',
+      documentosObrigatorios: [
+        'RG',
+        'CPF',
+        'Certificado Conclusão Ensino Medio',
+      ],
     },
     {
       vaga: 'Motorista de caminhão',
       nomeEmpresa: 'Revelare',
       fotoEmpresa: require('../assets/imgs/revelare.png'),
+      descricaoVaga:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in velit mauris. Fusce consectetur lorem eget congue pretium. Vestibulum non nulla sed tortor viverra ullamcorper non quis odio. Nullam eu laoreet mi. Cras luctus enim sit amet tincidunt faucibus. Quisque ut risus eget ex tincidunt consectetur. Etiam ullamcorper quam lorem, facilisis vehicula urna dictum sit amet. Aliquam eu consequat quam. Suspendisse potenti.',
+      cargaHoraria: 'Das 8:30 às 18:00',
+      periodoContratacao: '18/02/2020 - 19/03/2020',
+      escolaridade: 'Médio Completo',
+      documentosObrigatorios: [
+        'RG',
+        'CPF',
+        'Certificado Conclusão Ensino Medio',
+      ],
     },
   ];
 
@@ -78,11 +108,18 @@ const VagasDisponiveis = ({navigation}) => {
         VAGAS DISPONÍVEIS
       </Text>
       <FlatList
+        nestedScrollEnabled
         style={{marginTop: vh(3)}}
         horizontal={false}
         data={vagas}
         renderItem={({item}) => (
-          <ItemVaga nomeEmpresa={item.nomeEmpresa} nomeVaga={item.vaga} />
+          <ItemVaga
+            handlePress={() =>
+              navigation.navigate('DetalhesVaga', {vaga: item})
+            }
+            nomeEmpresa={item.nomeEmpresa}
+            nomeVaga={item.vaga}
+          />
         )}
         keyExtractor={(item) => item.nomeEmpresa}
       />

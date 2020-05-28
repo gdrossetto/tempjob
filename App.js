@@ -30,6 +30,8 @@ import EsqueceuSenha from './src/pages/esqueceuSenha';
 import CriarConta from './src/pages/criarConta';
 import VagasDisponiveis from './src/pages/vagasDisponiveis';
 import {Container, Header, Content, Picker, Form, Icon} from 'native-base';
+import DetalhesVaga from './src/pages/detalhesVaga';
+import DocumentosObrigatorios from './src/pages/documentosObrigatorios';
 function vh(percentage) {
   return Dimensions.get('window').height * (percentage / 100);
 }
@@ -37,36 +39,54 @@ function vw(percentage) {
   return Dimensions.get('window').width * (percentage / 100);
 }
 
+const AuthStack = createStackNavigator();
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+
+const AuthStackNavigator = () => {
+  return (
+    <AuthStack.Navigator>
+      <AuthStack.Screen
+        options={{headerShown: false}}
+        name="telaInicial"
+        component={TelaInicial}></AuthStack.Screen>
+      <AuthStack.Screen
+        options={{title: null, headerTransparent: true}}
+        name="Login"
+        component={LoginPage}></AuthStack.Screen>
+      <AuthStack.Screen
+        options={{title: null, headerTransparent: true}}
+        name="EsqueceuSenha"
+        component={EsqueceuSenha}></AuthStack.Screen>
+      <AuthStack.Screen
+        options={{title: null, headerTransparent: true}}
+        name="CriarConta"
+        component={CriarConta}></AuthStack.Screen>
+      <AuthStack.Screen
+        options={{headerShown: false}}
+        name="DrawerNavigator"
+        component={DrawerNav}></AuthStack.Screen>
+    </AuthStack.Navigator>
+  );
+};
 
 const StackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
         options={{headerShown: false}}
-        name="telaInicial"
-        component={TelaInicial}
-      />
-      <Stack.Screen
-        options={{title: null, headerTransparent: true}}
-        name="Login"
-        component={LoginPage}
-      />
-      <Stack.Screen
-        options={{title: null, headerTransparent: true}}
-        name="EsqueceuSenha"
-        component={EsqueceuSenha}
-      />
-      <Stack.Screen
-        options={{title: null, headerTransparent: true}}
-        name="CriarConta"
-        component={CriarConta}
+        name="VagasDisponiveis"
+        component={VagasDisponiveis}
       />
       <Stack.Screen
         options={{headerShown: false}}
-        name="DrawerNavigator"
-        component={DrawerNav}
+        name="DetalhesVaga"
+        component={DetalhesVaga}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="DocumentosObrigatorios"
+        component={DocumentosObrigatorios}
       />
     </Stack.Navigator>
   );
@@ -118,7 +138,7 @@ const DrawerNav = () => {
       <Drawer.Screen
         options={{title: 'Vagas Disponíveis'}}
         name="VagasDisponiveis"
-        component={VagasDisponiveis}
+        component={StackNavigator}
       />
       <Drawer.Screen
         options={{title: 'Notificações'}}
@@ -153,7 +173,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <StatusBar barStyle="light-content" />
-      <StackNavigator />
+      <AuthStackNavigator />
     </NavigationContainer>
   );
 };

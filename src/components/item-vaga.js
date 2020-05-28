@@ -14,9 +14,10 @@ function vw(percentage) {
   return Dimensions.get('window').width * (percentage / 100);
 }
 
-const BotaoDetalhes = () => {
+const BotaoDetalhes = ({handlePress}) => {
   return (
     <TouchableOpacity
+      onPress={handlePress}
       style={{
         backgroundColor: '#752d91',
         height: 48,
@@ -37,14 +38,14 @@ const BotaoDetalhes = () => {
   );
 };
 
-const ItemVaga = ({nomeVaga, nomeEmpresa}) => {
+const ItemVaga = ({nomeVaga, nomeEmpresa, handlePress}) => {
   return (
     <View style={styles.vagaContainer}>
       <View>
         <Text style={styles.nomeEmpresa}>{nomeVaga}</Text>
         <Text style={styles.nomeVaga}>{nomeEmpresa.toUpperCase()}</Text>
       </View>
-      <BotaoDetalhes />
+      <BotaoDetalhes handlePress={handlePress} />
     </View>
   );
 };
