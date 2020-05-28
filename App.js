@@ -32,6 +32,8 @@ import VagasDisponiveis from './src/pages/vagasDisponiveis';
 import {Container, Header, Content, Picker, Form, Icon} from 'native-base';
 import DetalhesVaga from './src/pages/detalhesVaga';
 import DocumentosObrigatorios from './src/pages/documentosObrigatorios';
+import CameraView from './src/pages/cameraView';
+import SuaConta from './src/pages/suaConta';
 function vh(percentage) {
   return Dimensions.get('window').height * (percentage / 100);
 }
@@ -87,6 +89,11 @@ const StackNavigator = () => {
         options={{headerShown: false}}
         name="DocumentosObrigatorios"
         component={DocumentosObrigatorios}
+      />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Camera"
+        component={CameraView}
       />
     </Stack.Navigator>
   );
@@ -158,7 +165,7 @@ const DrawerNav = () => {
       <Drawer.Screen
         options={{title: 'Minha Conta'}}
         name="Minha Conta"
-        component={VagasDisponiveis}
+        component={SuaConta}
       />
       <Drawer.Screen
         options={{title: 'Fale com a Tempjob'}}

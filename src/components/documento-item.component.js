@@ -14,7 +14,11 @@ function vw(percentage) {
   return Dimensions.get('window').width * (percentage / 100);
 }
 
-const DocumentoItem = ({tipoDocumento}) => {
+const DocumentoItem = ({
+  tipoDocumento,
+  handlePressFoto,
+  handlePressDocumento,
+}) => {
   return (
     <View style={styles.documentoContainer}>
       <Text style={styles.tipoDocumento}>{tipoDocumento}</Text>
@@ -30,14 +34,18 @@ const DocumentoItem = ({tipoDocumento}) => {
           textStyle={{fontSize: 14}}
           text={'ENVIAR ARQUIVO'}
         />
-        <View style={styles.iconContainer}>
+        <TouchableOpacity
+          onPress={handlePressFoto}
+          style={styles.iconContainer}>
           <Icon style={styles.icon} name={'camera'} />
           <Text style={styles.iconLabel}>Tirar foto</Text>
-        </View>
-        <View style={styles.iconContainer}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handlePressDocumento}
+          style={styles.iconContainer}>
           <Icon style={styles.icon} name={'clock'} />
           <Text style={styles.iconLabel}>Histórico docs</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

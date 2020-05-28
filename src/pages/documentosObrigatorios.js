@@ -38,7 +38,14 @@ const DocumentosObrigatorios = ({navigation, route}) => {
       />
       <Text style={styles.titulo}>DOCUMENTOS OBRIGATÓRIOS</Text>
       {documentos.map((documento) => {
-        return <DocumentoItem tipoDocumento={documento} />;
+        return (
+          <DocumentoItem
+            handlePressFoto={() =>
+              navigation.navigate('Camera', {documento: documento})
+            }
+            tipoDocumento={documento}
+          />
+        );
       })}
       <PurpleButton
         text={'ATUALIZAR DOCUMENTOS'}

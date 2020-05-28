@@ -23,12 +23,14 @@ const WhiteButtonTitle = styled.Text`
   text-align: center;
   font-weight: bold;
   margin: 12px;
+  margin-top: auto;
+  margin-bottom: auto;
 `;
 
-const WhiteButton = ({text, handlePress}) => {
+const WhiteButton = ({text, handlePress, style, textStyle}) => {
   return (
-    <WhiteButtonContainer onPress={handlePress}>
-      <WhiteButtonTitle>{text}</WhiteButtonTitle>
+    <WhiteButtonContainer style={style} onPress={handlePress}>
+      <WhiteButtonTitle style={textStyle}>{text}</WhiteButtonTitle>
     </WhiteButtonContainer>
   );
 };
