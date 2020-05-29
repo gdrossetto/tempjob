@@ -1,18 +1,6 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, Dimensions, Image} from 'react-native';
-import Logo from '../components/logo.component';
-import InputTexto from '../components/input-texto.component';
-import PurpleButton from '../components/purple-button.component';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import styled from 'styled-components/native';
-import {Container, Header, Content, Picker, Form, Icon} from 'native-base';
-import {color} from 'react-native-reanimated';
-function vh(percentage) {
-  return Dimensions.get('window').height * (percentage / 100);
-}
-function vw(percentage) {
-  return Dimensions.get('window').width * (percentage / 100);
-}
+import {View, Text, StyleSheet} from 'react-native';
+import {vw, vh} from '../util/Util';
 
 const DescricaoItem = ({titulo, corpo, documentos}) => {
   return (

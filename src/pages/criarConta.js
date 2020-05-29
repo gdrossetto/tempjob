@@ -1,20 +1,15 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, Dimensions, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
 import Logo from '../components/logo.component';
 import InputTexto from '../components/input-texto.component';
 import PurpleButton from '../components/purple-button.component';
 import {ScrollView} from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
-import {Container, Header, Content, Picker, Form, Icon} from 'native-base';
+import {Icon} from 'native-base';
 import InputPicker from '../components/input-picker.components';
-import ReCaptcha from 'react-native-recaptcha-v3';
-
-function vh(percentage) {
-  return Dimensions.get('window').height * (percentage / 100);
-}
-function vw(percentage) {
-  return Dimensions.get('window').width * (percentage / 100);
-}
+import NumberFormat from 'react-number-format';
+import {vh, vw} from '../util/Util';
+import InputTelefone from '../components/input-telefone.component';
 
 const FotoDiv = styled.View`
   display: flex;
@@ -25,7 +20,7 @@ const FotoDiv = styled.View`
 
 const CriarConta = ({navigation}) => {
   const [radioCheck, setRadioCheck] = React.useState(false);
-
+  const [telefone, setTelefone] = React.useState('');
   return (
     <ScrollView>
       <Logo style={{marginTop: vh(8), marginBottom: vh(4)}} />
@@ -40,7 +35,13 @@ const CriarConta = ({navigation}) => {
         <Text style={styles.textoAdicionarFoto}>Adicionar foto</Text>
       </FotoDiv>
       <InputTexto style={{marginTop: '5%'}} label={'Nome completo'} />
-      <InputTexto style={{marginTop: '5%'}} label={'Telefone'} />
+
+      <InputTelefone
+        telefone={telefone}
+        changeText={(text) => setTelefone(text)}
+        style={{marginTop: '5%'}}
+        label={'Telefone'}
+      />
       <InputPicker style={{marginTop: '5%'}} label={'Estado'} />
       <InputPicker style={{marginTop: '5%'}} label={'Cidade'} />
       <InputTexto style={{marginTop: '5%'}} label={'E-mail'} />

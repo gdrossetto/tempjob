@@ -7,12 +7,7 @@ import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 import {Container, Header, Content, Picker, Form, Icon} from 'native-base';
 import {color} from 'react-native-reanimated';
-function vh(percentage) {
-  return Dimensions.get('window').height * (percentage / 100);
-}
-function vw(percentage) {
-  return Dimensions.get('window').width * (percentage / 100);
-}
+import {vw, vh} from '../util/Util';
 
 const DocumentoItem = ({
   tipoDocumento,

@@ -5,18 +5,20 @@ import {Icon} from 'native-base';
 import {vw, vh} from '../util/Util';
 import BotaoDetalhes from './botao-detalhes.component';
 
-const ItemVaga = ({nomeVaga, nomeEmpresa, handlePress}) => {
+const ItemHistorico = ({nomeVaga, nomeEmpresa, data}) => {
   return (
     <View style={styles.vagaContainer}>
       <View>
         <Text style={styles.nomeEmpresa}>{nomeVaga}</Text>
-        <Text style={styles.nomeVaga}>{nomeEmpresa.toUpperCase()}</Text>
+        <Text style={styles.nomeVaga}>
+          {nomeEmpresa ? nomeEmpresa.toUpperCase() : null}
+        </Text>
       </View>
-      <BotaoDetalhes handlePress={handlePress} />
+      <Text style={styles.data}>{data}</Text>
     </View>
   );
 };
-export default ItemVaga;
+export default ItemHistorico;
 
 const styles = StyleSheet.create({
   nomeEmpresa: {
@@ -34,5 +36,9 @@ const styles = StyleSheet.create({
     borderBottomColor: '#752d91',
     borderBottomWidth: 0.5,
     flexDirection: 'row',
+  },
+  data: {
+    marginLeft: 'auto',
+    marginTop: 'auto',
   },
 });

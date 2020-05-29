@@ -1,41 +1,69 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, Dimensions, Image} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import Logo from '../components/logo.component';
 import InputTexto from '../components/input-texto.component';
 import PurpleButton from '../components/purple-button.component';
 import {ScrollView} from 'react-native-gesture-handler';
-import styled from 'styled-components/native';
-import {
-  Container,
-  Header,
-  Content,
-  Picker,
-  Form,
-  Icon,
-  Segment,
-  Button,
-} from 'native-base';
+import {Icon} from 'native-base';
 import InputPicker from '../components/input-picker.components';
-import ReCaptcha from 'react-native-recaptcha-v3';
 import PageHeader from '../components/page-header.component';
 import WhiteButton from '../components/white-button.component';
-
-function vh(percentage) {
-  return Dimensions.get('window').height * (percentage / 100);
-}
-function vw(percentage) {
-  return Dimensions.get('window').width * (percentage / 100);
-}
-
-const FotoDiv = styled.View`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 20px;
-  margin-top: 20px;
-`;
+import {vh, vw} from '../util/Util';
+import ItemHistorico from '../components/item-historico.component';
 
 const SuaConta = ({navigation}) => {
   const [aba, setAba] = React.useState(1);
+
+  var vagas = [
+    {
+      vaga: 'Motorista de caminhão',
+      nomeEmpresa: 'Ambev',
+      fotoEmpresa: require('../assets/imgs/ambev.png'),
+      descricaoVaga:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in velit mauris. Fusce consectetur lorem eget congue pretium. Vestibulum non nulla sed tortor viverra ullamcorper non quis odio. Nullam eu laoreet mi. Cras luctus enim sit amet tincidunt faucibus. Quisque ut risus eget ex tincidunt consectetur. Etiam ullamcorper quam lorem, facilisis vehicula urna dictum sit amet. Aliquam eu consequat quam. Suspendisse potenti.',
+      cargaHoraria: 'Das 8:30 às 18:00',
+      periodoContratacao: '18/02/2020 - 19/03/2020',
+      escolaridade: 'Médio Completo',
+      documentosObrigatorios: [
+        'RG',
+        'CPF',
+        'Certificado Conclusão Ensino Medio',
+      ],
+      data: '22/05/2020',
+    },
+    {
+      vaga: 'Motorista de caminhão',
+      nomeEmpresa: 'Grupo Vip',
+      fotoEmpresa: require('../assets/imgs/vip.png'),
+      descricaoVaga:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in velit mauris. Fusce consectetur lorem eget congue pretium. Vestibulum non nulla sed tortor viverra ullamcorper non quis odio. Nullam eu laoreet mi. Cras luctus enim sit amet tincidunt faucibus. Quisque ut risus eget ex tincidunt consectetur. Etiam ullamcorper quam lorem, facilisis vehicula urna dictum sit amet. Aliquam eu consequat quam. Suspendisse potenti.',
+      cargaHoraria: 'Das 8:30 às 18:00',
+      periodoContratacao: '18/02/2020 - 19/03/2020',
+      escolaridade: 'Médio Completo',
+      documentosObrigatorios: [
+        'RG',
+        'CPF',
+        'Certificado Conclusão Ensino Medio',
+      ],
+      data: '22/05/2020',
+    },
+    {
+      vaga: 'Motorista de caminhão',
+      nomeEmpresa: 'Revelare',
+      fotoEmpresa: require('../assets/imgs/revelare.png'),
+      descricaoVaga:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in velit mauris. Fusce consectetur lorem eget congue pretium. Vestibulum non nulla sed tortor viverra ullamcorper non quis odio. Nullam eu laoreet mi. Cras luctus enim sit amet tincidunt faucibus. Quisque ut risus eget ex tincidunt consectetur. Etiam ullamcorper quam lorem, facilisis vehicula urna dictum sit amet. Aliquam eu consequat quam. Suspendisse potenti.',
+      cargaHoraria: 'Das 8:30 às 18:00',
+      periodoContratacao: '18/02/2020 - 19/03/2020',
+      escolaridade: 'Médio Completo',
+      documentosObrigatorios: [
+        'RG',
+        'CPF',
+        'Certificado Conclusão Ensino Medio',
+      ],
+      data: '22/05/2020',
+    },
+  ];
 
   return (
     <ScrollView>
@@ -127,7 +155,20 @@ const SuaConta = ({navigation}) => {
           />
         </View>
       ) : (
-        <Text>Oi</Text>
+        <View>
+          <Text style={styles.historicoTitle}>Histórico de contratações</Text>
+          {vagas.map((vaga) => {
+            return (
+              <View>
+                <ItemHistorico
+                  nomeEmpresa={vaga.nomeEmpresa}
+                  nomeVaga={vaga.vaga}
+                  data={vaga.data}
+                />
+              </View>
+            );
+          })}
+        </View>
       )}
     </ScrollView>
   );
@@ -167,5 +208,11 @@ const styles = StyleSheet.create({
 
     marginLeft: 16,
     fontSize: 22,
+  },
+  historicoTitle: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: vh(3),
+    marginBottom: vh(3),
   },
 });

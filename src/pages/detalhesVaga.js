@@ -16,13 +16,7 @@ import {Container, Header, Content, Picker, Form, Icon} from 'native-base';
 import PageHeader from '../components/page-header.component';
 import ItemVaga from '../components/item-vaga';
 import DescricaoItem from '../components/descricao-item.component';
-
-function vh(percentage) {
-  return Dimensions.get('window').height * (percentage / 100);
-}
-function vw(percentage) {
-  return Dimensions.get('window').width * (percentage / 100);
-}
+import {vh, vw} from '../util/Util';
 
 const DetalhesVaga = ({navigation, route}) => {
   const {vaga} = route.params;

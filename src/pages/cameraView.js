@@ -1,15 +1,11 @@
-import React, {Component} from 'react';
-import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import CameraOverlay from '../components/camera-overlay.component';
-import {Container, Header, Content, Picker, Form, Icon} from 'native-base';
+import {Icon} from 'native-base';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-function vh(percentage) {
-  return Dimensions.get('window').height * (percentage / 100);
-}
-function vw(percentage) {
-  return Dimensions.get('window').width * (percentage / 100);
-}
+import {vh} from '../util/Util';
+
 const CameraView = ({navigation, route}) => {
   const {documento} = route.params;
 
@@ -24,7 +20,7 @@ const CameraView = ({navigation, route}) => {
       />
       <CameraOverlay />
 
-      <View style={styles.cameraElements}>
+      <View style={styles.cameraOverlay}>
         <Icon
           onPress={() => navigation.pop()}
           name="arrow-back"
@@ -82,7 +78,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
-  cameraElements: {
+  cameraOverlay: {
     zIndex: 2,
     position: 'absolute',
     top: 0,

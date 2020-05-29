@@ -3,10 +3,7 @@ import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import Logo from '../components/logo.component';
 import InputTexto from '../components/input-texto.component';
 import PurpleButton from '../components/purple-button.component';
-
-function vh(percentage) {
-  return Dimensions.get('window').height * (percentage / 100);
-}
+import {vh} from '../util/Util';
 
 const LoginPage = ({navigation}) => {
   return (

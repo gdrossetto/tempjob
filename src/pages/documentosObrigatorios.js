@@ -17,13 +17,7 @@ import PageHeader from '../components/page-header.component';
 import ItemVaga from '../components/item-vaga';
 import DescricaoItem from '../components/descricao-item.component';
 import DocumentoItem from '../components/documento-item.component';
-
-function vh(percentage) {
-  return Dimensions.get('window').height * (percentage / 100);
-}
-function vw(percentage) {
-  return Dimensions.get('window').width * (percentage / 100);
-}
+import {vh} from '../util/Util';
 
 const DocumentosObrigatorios = ({navigation, route}) => {
   const {documentos} = route.params;

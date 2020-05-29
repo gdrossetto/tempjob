@@ -1,12 +1,4 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ImageBackground,
-  StyleSheet,
-} from 'react-native';
 import styled from 'styled-components/native';
 
 const PurpleButtonContainer = styled.TouchableOpacity`

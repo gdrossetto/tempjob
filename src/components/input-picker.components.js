@@ -1,23 +1,8 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ImageBackground,
-  StyleSheet,
-  Dimensions,
-  TextInput,
-} from 'react-native';
+import {View, Text} from 'react-native';
 import styled from 'styled-components/native';
-import {Container, Header, Content, Picker, Form} from 'native-base';
-
-function vh(percentage) {
-  return Dimensions.get('window').height * (percentage / 100);
-}
-function vw(percentage) {
-  return Dimensions.get('window').width * (percentage / 100);
-}
+import {Picker, Form} from 'native-base';
+import {vw, vh} from '../util/Util';
 
 const PickerButton = styled.TouchableOpacity`
   width: 80%;
@@ -55,7 +40,6 @@ const InputPicker = ({style, label, placeholder}) => {
           }}>
           <Picker.Item label="ATM Card" value="key1" />
           <Picker.Item label="Wallet" value="key0" />
-
           <Picker.Item label="Debit Card" value="key2" />
           <Picker.Item label="Credit Card" value="key3" />
           <Picker.Item label="Net Banking" value="key4" />

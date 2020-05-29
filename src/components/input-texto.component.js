@@ -1,13 +1,5 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ImageBackground,
-  StyleSheet,
-  TextInput,
-} from 'react-native';
+import {View, Text} from 'react-native';
 import styled from 'styled-components/native';
 
 const FormField = styled.TextInput`
@@ -18,7 +10,7 @@ const FormField = styled.TextInput`
   padding: 10px;
 `;
 
-const InputTexto = ({style, label, placeholder}) => {
+const InputTexto = ({style, label, placeholder, changeText}) => {
   return (
     <View style={style}>
       <Text
@@ -34,7 +26,7 @@ const InputTexto = ({style, label, placeholder}) => {
       <FormField
         placeholder={placeholder}
         style={{borderColor: 'gray', borderWidth: 1}}
-        onChangeText={(text) => onChangeText(text)}
+        onChangeText={changeText}
       />
     </View>
   );

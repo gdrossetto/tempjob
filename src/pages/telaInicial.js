@@ -1,21 +1,9 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Dimensions,
-  ImageBackground,
-  StyleSheet,
-} from 'react-native';
-import styled from 'styled-components/native';
+import {View, ImageBackground, StyleSheet} from 'react-native';
 import Logo from '../components/logo.component';
 import PurpleButton from '../components/purple-button.component';
 import WhiteButton from '../components/white-button.component';
-
-function vh(percentage) {
-  return Dimensions.get('window').height * (percentage / 100);
-}
+import {vh} from '../util/Util';
 
 const TelaInicial = ({navigation}) => {
   return (
@@ -25,7 +13,7 @@ const TelaInicial = ({navigation}) => {
         style={styles.image}>
         <Logo style={{marginTop: vh(8)}} />
         <PurpleButton
-          style={{marginBottom: -16, marginTop: vh(54)}}
+          style={{marginBottom: -vh(2), marginTop: vh(54)}}
           text={'ACESSAR CONTA'}
           handlePress={() => {
             navigation.navigate('Login');
