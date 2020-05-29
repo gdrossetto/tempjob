@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "214578848740",
+    "firebase_url": "https://tempjob-64b1b.firebaseio.com",
+    "project_id": "tempjob-64b1b",
+    "storage_bucket": "tempjob-64b1b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:214578848740:android:b7f9d71f74911ab06e9df1",
+        "android_client_info": {
+          "package_name": "com.revelare.tempjob"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "214578848740-nl1fh1htprfahs2on58r9iame9iceh8r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhmmlcYctVp4w13co0G9V9aROvZ4EfxHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "214578848740-nl1fh1htprfahs2on58r9iame9iceh8r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

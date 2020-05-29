@@ -10,7 +10,7 @@ const FormField = styled.TextInput`
   padding: 10px;
 `;
 
-const InputTexto = ({style, label, placeholder, changeText}) => {
+const InputTexto = ({style, label, placeholder, changeText, senha, valor}) => {
   return (
     <View style={style}>
       <Text
@@ -24,9 +24,11 @@ const InputTexto = ({style, label, placeholder, changeText}) => {
         {label}
       </Text>
       <FormField
+        secureTextEntry={senha}
         placeholder={placeholder}
         style={{borderColor: 'gray', borderWidth: 1}}
         onChangeText={changeText}
+        value={valor}
       />
     </View>
   );
