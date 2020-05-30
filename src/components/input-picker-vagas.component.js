@@ -14,7 +14,14 @@ const PickerButton = styled.TouchableOpacity`
   border-color: grey;
 `;
 
-const InputPicker = ({listaCidades, data, style, label, mudaValor, valor}) => {
+const InputPickerVagas = ({
+  listaCidades,
+  data,
+  style,
+  label,
+  mudaValor,
+  valor,
+}) => {
   return (
     <View style={style}>
       <Text
@@ -40,21 +47,12 @@ const InputPicker = ({listaCidades, data, style, label, mudaValor, valor}) => {
             marginBottom: 10,
           }}>
           {data.map((item) => {
-            if (!listaCidades) {
-              return (
-                <Picker.Item
-                  label={item.sigla ? item.sigla : ''}
-                  value={item.sigla ? item.sigla : null}
-                />
-              );
-            } else {
-              return (
-                <Picker.Item
-                  label={item.nome ? item.nome : 'Estados'}
-                  value={item.nome ? item.nome : null}
-                />
-              );
-            }
+            return (
+              <Picker.Item
+                label={item.nomeVaga ? item.nomeVaga : 'Vaga'}
+                value={item.nomeVaga ? item.nomeVaga : null}
+              />
+            );
           })}
         </Picker>
       </PickerButton>
@@ -62,4 +60,4 @@ const InputPicker = ({listaCidades, data, style, label, mudaValor, valor}) => {
   );
 };
 
-export default InputPicker;
+export default InputPickerVagas;

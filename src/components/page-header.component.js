@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   userName: {
+    width: vw(50),
     textAlign: 'center',
     marginTop: 5,
   },

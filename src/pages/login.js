@@ -6,19 +6,30 @@ import PurpleButton from '../components/purple-button.component';
 import {vh, firebaseConfig} from '../util/Util';
 import {firebase} from '@react-native-firebase/auth';
 import auth from '@react-native-firebase/auth';
-
-async function login(email, password) {
-  try {
-    const response = await auth().signInWithEmailAndPassword(email, password);
-    alert(response.user.email);
-  } catch (e) {
-    alert(e);
-  }
-}
+import firestore from '@react-native-firebase/firestore';
 
 const LoginPage = ({navigation}) => {
   const [email, setEmail] = React.useState('');
   const [senha, setSenha] = React.useState('');
+
+  function login(email, senha) {
+    if (email != '' && senha != '') {
+      auth()
+        .signInWithEmailAndPassword(email, senha)
+        .then(() =>
+          navigation.navigate('DrawerNavigator', {screen: 'VagasDisponiveis'}),
+        )
+        .catch((e) => {
+          alert(e.message);
+          return false;
+        });
+
+      return true;
+    } else {
+      alert('Digite todos os campos');
+      return false;
+    }
+  }
 
   React.useEffect(() => {
     if (!firebase.apps.length) {
@@ -48,9 +59,7 @@ const LoginPage = ({navigation}) => {
       <PurpleButton
         handlePress={() => {
           // navigation.navigate('DrawerNavigator');
-          login(email, senha).then(() =>
-            navigation.navigate('DrawerNavigator'),
-          );
+          login(email, senha);
         }}
         style={{marginTop: '20%'}}
         text={'ENTRAR'}

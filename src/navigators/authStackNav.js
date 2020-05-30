@@ -8,13 +8,21 @@ import DrawerNav from './drawerNav';
 
 const AuthStack = createStackNavigator();
 
-const AuthStackNavigator = () => {
+const AuthStackNavigator = ({logado}) => {
   return (
     <AuthStack.Navigator>
-      <AuthStack.Screen
-        options={{headerShown: false}}
-        name="telaInicial"
-        component={TelaInicial}></AuthStack.Screen>
+      {logado ? ( //Se usuário estiver logado o AuthStack abre direto na pagina de vagas Disponíveis
+        <AuthStack.Screen
+          options={{headerShown: false}}
+          name="DrawerNavigator"
+          component={DrawerNav}></AuthStack.Screen>
+      ) : (
+        //Se tiver deslogado vai pra tela inicial
+        <AuthStack.Screen
+          options={{headerShown: false}}
+          name="telaInicial"
+          component={TelaInicial}></AuthStack.Screen>
+      )}
       <AuthStack.Screen
         options={{title: null, headerTransparent: true}}
         name="Login"
@@ -27,10 +35,6 @@ const AuthStackNavigator = () => {
         options={{title: null, headerTransparent: true}}
         name="CriarConta"
         component={CriarConta}></AuthStack.Screen>
-      <AuthStack.Screen
-        options={{headerShown: false}}
-        name="DrawerNavigator"
-        component={DrawerNav}></AuthStack.Screen>
     </AuthStack.Navigator>
   );
 };

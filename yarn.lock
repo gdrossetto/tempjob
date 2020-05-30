@@ -1465,6 +1465,16 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-8.0.0.tgz#fe75965360f5c7f10c40a27f88dbe7479e5e1b80"
   integrity sha512-r3SUHTSEyde8kQ9Pj24NzNonrsvOUWyl8cQjKCTgu94elbx7CyBgrc5TUnfB/91ej04FH2wsWJ36JdzoLedJRg==
 
+"@react-native-firebase/firestore@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-7.1.0.tgz#e15e452f68e449dc0f52d1156bbf7ce3000de8b0"
+  integrity sha512-Ur5OPbPe+fg/U1Xd+kGmtV4kSprvcGiFBuetMfBe6iPvlXjE1eY7T3+l7P655kpn+1ps5nlnVPEihXaMoVkeOg==
+
+"@react-native-firebase/storage@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/storage/-/storage-7.1.0.tgz#a72b9e16bf461a58bdaf84c961128472a3e864d3"
+  integrity sha512-yX2Zw5sVhpUIQjLcIMOZJUMJ+HX9sZNfKi8B1P6doQUzOBbHOKrfdTAZ+6/ZBgflG3XQMThZJIOoHcVrL2sVvw==
+
 "@react-navigation/core@^5.8.2":
   version "5.8.2"
   resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-5.8.2.tgz#ba280a2bff2b82727b990a9eb842580a21a668a3"

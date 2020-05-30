@@ -5,7 +5,9 @@ import {ScrollView} from 'react-native-gesture-handler';
 import PageHeader from '../components/page-header.component';
 import ItemVaga from '../components/item-vaga';
 import {vh, vw} from '../util/Util';
-
+import {firebase} from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 const VagasDisponiveis = ({navigation}) => {
   var vagas = [
     {
@@ -55,13 +57,34 @@ const VagasDisponiveis = ({navigation}) => {
     },
   ];
 
+  const [user, setUser] = React.useState({});
+  React.useEffect(() => {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    auth().onAuthStateChanged((user) => {
+      if (user) {
+        firestore()
+          .collection('users')
+          .doc(user.uid)
+          .get()
+          .then((response) => {
+            setUser(response.data());
+          });
+      } else {
+        console.log('erro');
+      }
+    });
+  }, [user.nome]);
+
   return (
     <ScrollView>
       <PageHeader
         handlePressMenu={() => {
           navigation.openDrawer();
         }}
-        userName={'Gabriel Rossetto'}
+        userName={user.nome ? user.nome.split('.')[0] : ''}
         hasArrowBack={false}
         navigationPopHandler={() => navigation.pop()}
       />
