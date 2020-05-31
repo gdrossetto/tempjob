@@ -12,7 +12,6 @@ const BotaoDetalhes = ({handlePress}) => {
         height: 48,
         width: 48,
         borderRadius: 5,
-        marginLeft: vw(20),
       }}>
       <Icon
         name="eye"

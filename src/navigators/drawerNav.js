@@ -9,6 +9,7 @@ import {Icon} from 'native-base';
 import VagasStackNavigator from './vagasStackNav';
 import VagasDisponiveis from '../pages/vagasDisponiveis';
 import SuaConta from '../pages/suaConta';
+import PerfilStackNavigator from './alterarPerfilStackNav';
 
 function vh(percentage) {
   return Dimensions.get('window').height * (percentage / 100);
@@ -47,7 +48,7 @@ const DrawerNav = () => {
       <Drawer.Screen
         options={{title: 'Minha Conta'}}
         name="Minha Conta"
-        component={SuaConta}
+        component={PerfilStackNavigator}
       />
       <Drawer.Screen
         options={{title: 'Fale com a Tempjob'}}

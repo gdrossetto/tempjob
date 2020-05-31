@@ -176,7 +176,7 @@ const CriarConta = ({navigation, route}) => {
   }
 
   React.useEffect(() => {
-    setRef(gerarNomeArquivoStorage(8));
+    setRef(`profilepics/${gerarNomeArquivoStorage(8)}`);
   }, []);
 
   React.useEffect(() => {

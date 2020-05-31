@@ -9,11 +9,12 @@ import {firebase} from '@react-native-firebase/auth';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 const VagasDisponiveis = ({navigation}) => {
-  var vagas = [
+  var vagas2 = [
     {
       vaga: 'Motorista de caminhão',
       nomeEmpresa: 'Ambev',
-      fotoEmpresa: require('../assets/imgs/ambev.png'),
+      fotoEmpresa:
+        'https://4.bp.blogspot.com/-0PHGWgU8NXo/WQmbqP2_CvI/AAAAAAAA_Rk/VIHSBMicHXI7TmQ2K4hCBEXF_gHyrU0ZgCLcB/s400/ambev.jpeg',
       descricaoVaga:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in velit mauris. Fusce consectetur lorem eget congue pretium. Vestibulum non nulla sed tortor viverra ullamcorper non quis odio. Nullam eu laoreet mi. Cras luctus enim sit amet tincidunt faucibus. Quisque ut risus eget ex tincidunt consectetur. Etiam ullamcorper quam lorem, facilisis vehicula urna dictum sit amet. Aliquam eu consequat quam. Suspendisse potenti.',
       cargaHoraria: 'Das 8:30 às 18:00',
@@ -26,9 +27,10 @@ const VagasDisponiveis = ({navigation}) => {
       ],
     },
     {
-      vaga: 'Motorista de caminhão',
-      nomeEmpresa: 'Grupo Vip',
-      fotoEmpresa: require('../assets/imgs/vip.png'),
+      vaga: 'Analista de segurança',
+      nomeEmpresa: 'Netshoes',
+      fotoEmpresa:
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQdX4KoAbLfKRHqcGRQZkMU31O2V_vJsyBA3ButugsLfxHixWaf&usqp=CAU',
       descricaoVaga:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in velit mauris. Fusce consectetur lorem eget congue pretium. Vestibulum non nulla sed tortor viverra ullamcorper non quis odio. Nullam eu laoreet mi. Cras luctus enim sit amet tincidunt faucibus. Quisque ut risus eget ex tincidunt consectetur. Etiam ullamcorper quam lorem, facilisis vehicula urna dictum sit amet. Aliquam eu consequat quam. Suspendisse potenti.',
       cargaHoraria: 'Das 8:30 às 18:00',
@@ -43,7 +45,8 @@ const VagasDisponiveis = ({navigation}) => {
     {
       vaga: 'Motorista de caminhão',
       nomeEmpresa: 'Revelare',
-      fotoEmpresa: require('../assets/imgs/revelare.png'),
+      fotoEmpresa:
+        'https://media-exp1.licdn.com/dms/image/C4D0BAQGt1rzeMbHFIQ/company-logo_200_200/0?e=2159024400&v=beta&t=fnL_7pr5kvXGI0WHNoS5KuugBZlXfVE7hxbUCGJRteo',
       descricaoVaga:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in velit mauris. Fusce consectetur lorem eget congue pretium. Vestibulum non nulla sed tortor viverra ullamcorper non quis odio. Nullam eu laoreet mi. Cras luctus enim sit amet tincidunt faucibus. Quisque ut risus eget ex tincidunt consectetur. Etiam ullamcorper quam lorem, facilisis vehicula urna dictum sit amet. Aliquam eu consequat quam. Suspendisse potenti.',
       cargaHoraria: 'Das 8:30 às 18:00',
@@ -58,6 +61,22 @@ const VagasDisponiveis = ({navigation}) => {
   ];
 
   const [user, setUser] = React.useState({});
+  const [vagas, setVagas] = React.useState([]);
+
+  function getVagas() {
+    let vagas = [];
+    firestore()
+      .collection('vagas')
+      .orderBy('nomeVaga', 'asc')
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((vaga) => {
+          vagas.push(vaga.data());
+        });
+        setVagas(vagas);
+      });
+  }
+
   React.useEffect(() => {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
@@ -78,13 +97,17 @@ const VagasDisponiveis = ({navigation}) => {
     });
   }, [user.nome]);
 
+  React.useEffect(() => {
+    getVagas();
+  }, [vagas.length]);
+
   return (
     <ScrollView>
       <PageHeader
         handlePressMenu={() => {
           navigation.openDrawer();
         }}
-        userName={user.nome ? user.nome.split('.')[0] : ''}
+        userName={user.nome ? user.nome.split(' ')[0] : ''}
         hasArrowBack={false}
         navigationPopHandler={() => navigation.pop()}
       />
@@ -100,7 +123,7 @@ const VagasDisponiveis = ({navigation}) => {
               marginHorizontal: 10,
               borderRadius: 32,
             }}
-            source={item.fotoEmpresa}></Image>
+            source={{uri: item.fotoEmpresa}}></Image>
         )}
         keyExtractor={(item) => item.nomeEmpresa}
       />
@@ -124,7 +147,7 @@ const VagasDisponiveis = ({navigation}) => {
               navigation.navigate('DetalhesVaga', {vaga: item})
             }
             nomeEmpresa={item.nomeEmpresa}
-            nomeVaga={item.vaga}
+            nomeVaga={item.nomeVaga}
           />
         )}
         keyExtractor={(item) => item.nomeEmpresa}

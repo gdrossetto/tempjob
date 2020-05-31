@@ -6,6 +6,7 @@ import {
   Dimensions,
   Image,
   FlatList,
+  Alert,
 } from 'react-native';
 import Logo from '../components/logo.component';
 import InputTexto from '../components/input-texto.component';
@@ -21,6 +22,22 @@ import {vh, vw} from '../util/Util';
 const DetalhesVaga = ({navigation, route}) => {
   const {vaga} = route.params;
 
+  const criarAlertaCadastro = () =>
+    Alert.alert(
+      'Parabéns',
+      'Para finalizar sua candidatura à vaga, basta você enviar alguns documentos obrigatórios.',
+      [
+        {
+          text: 'OK',
+          onPress: () =>
+            navigation.navigate('DocumentosObrigatorios', {
+              documentos: vaga.documentosObrigatorios,
+            }),
+        },
+      ],
+      {cancelable: false},
+    );
+
   return (
     <ScrollView>
       <PageHeader
@@ -29,7 +46,7 @@ const DetalhesVaga = ({navigation, route}) => {
         userName={'Gabriel Rossetto'}
         hasArrowBack={true}
       />
-      <Text style={styles.nomeVaga}>{vaga.vaga.toUpperCase()}</Text>
+      <Text style={styles.nomeVaga}>{vaga.nomeVaga.toUpperCase()}</Text>
       <Text style={styles.nomeEmpresa}>{vaga.nomeEmpresa}</Text>
       <DescricaoItem titulo={'Descrição da vaga'} corpo={vaga.descricaoVaga} />
       <DescricaoItem titulo={'Carga Horária:'} corpo={vaga.cargaHoraria} />
@@ -45,11 +62,7 @@ const DetalhesVaga = ({navigation, route}) => {
       <PurpleButton
         style={{marginTop: vh(2), marginBottom: vh(4), width: vw(60)}}
         text={'ME CANDIDATAR'}
-        handlePress={() =>
-          navigation.navigate('DocumentosObrigatorios', {
-            documentos: vaga.documentosObrigatorios,
-          })
-        }
+        handlePress={() => criarAlertaCadastro()}
       />
     </ScrollView>
   );

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import Logo from '../components/logo.component';
 import InputTexto from '../components/input-texto.component';
 import PurpleButton from '../components/purple-button.component';
@@ -8,14 +8,16 @@ import {Icon} from 'native-base';
 import InputPicker from '../components/input-picker.components';
 import PageHeader from '../components/page-header.component';
 import WhiteButton from '../components/white-button.component';
-import {vh, vw} from '../util/Util';
+import {vh, vw, gerarNomeArquivoStorage} from '../util/Util';
 import ItemHistorico from '../components/item-historico.component';
 import {firebase} from '@react-native-firebase/auth';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import InputPickerVagas from '../components/input-picker-vagas.component';
+import {useFocusEffect} from '@react-navigation/native';
+import storage from '@react-native-firebase/storage';
 
-const SuaConta = ({navigation}) => {
+const SuaConta = ({navigation, route}) => {
   const [aba, setAba] = React.useState(1);
   const [user, setUser] = React.useState({});
   const [nome, setNome] = React.useState('');
@@ -36,6 +38,10 @@ const SuaConta = ({navigation}) => {
   const [vaga1, setVaga1] = React.useState();
   const [vaga2, setVaga2] = React.useState();
   const [vaga3, setVaga3] = React.useState();
+  const [fotoRefStorage, setRef] = React.useState('');
+  const [linkFoto, setLinkFoto] = React.useState('');
+
+  const params = route.params;
 
   function getVagas() {
     let vagas = [];
@@ -119,50 +125,81 @@ const SuaConta = ({navigation}) => {
   ];
 
   React.useEffect(() => {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
+    setRef(`profilepics/${gerarNomeArquivoStorage(8)}`);
+  }, []);
+
+  React.useEffect(() => {
+    if (params) {
+      setLinkFoto(params);
     }
+  }, [params]);
 
-    auth().onAuthStateChanged((authUser) => {
-      if (authUser) {
-        firestore()
-          .collection('users')
-          .doc(authUser.uid)
-          .get()
-          .then((response) => {
-            setUser(response.data());
-          });
-        setUid(authUser.uid);
-      } else {
-        console.log('erro');
+  React.useEffect(() => {
+    if (linkFoto != '') {
+      console.log(linkFoto);
+      storage()
+        .ref(fotoRefStorage)
+        .putFile(linkFoto.foto)
+        .then(() => console.log('sucesso'))
+        .catch((e) => console.error(e.message));
+    }
+  }, [linkFoto]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
       }
-      getEstados();
-    });
-  }, [user.nome]);
 
-  React.useEffect(() => {
-    getVagas();
-  }, [vagas.length]);
+      auth().onAuthStateChanged((authUser) => {
+        if (authUser) {
+          firestore()
+            .collection('users')
+            .doc(authUser.uid)
+            .get()
+            .then((response) => {
+              setUser(response.data());
+            });
+          setUid(authUser.uid);
+        } else {
+          console.log('erro');
+        }
+        getEstados();
+      });
+    }, [user.nome]),
+  );
 
-  React.useEffect(() => {
-    setNome(user.nome);
-    setEmail(user.email);
-    setFoto(user.foto);
-    setEstado(user.estado);
-    setCpf(user.cpf);
-    setVaga1(user.vaga1),
-      setVaga2(user.vaga2),
-      setVaga3(user.vaga3),
-      setDataNascimento(user.dataNasc);
-  }, [user]);
+  useFocusEffect(
+    React.useCallback(() => {
+      getVagas();
+    }, [vagas.length]),
+  );
 
-  React.useEffect(() => {
-    getCidades(estado);
-  }, [estado]);
+  useFocusEffect(
+    React.useCallback(() => {
+      setNome(user.nome);
+      setEmail(user.email);
+      setFoto(user.foto);
+      setEstado(user.estado);
+      setCpf(user.cpf);
+      setVaga1(user.vaga1),
+        setVaga2(user.vaga2),
+        setVaga3(user.vaga3),
+        setDataNascimento(user.dataNasc);
+    }, [user]),
+  );
 
-  React.useEffect(() => {
-    setCidade(user.cidade);
-  }, [cidades.length]);
+  useFocusEffect(
+    React.useCallback(() => {
+      getCidades(estado);
+    }, [estado]),
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setCidade(user.cidade);
+    }, [cidades.length]),
+  );
 
   function atualizarCadastro(
     nome,
@@ -173,6 +210,7 @@ const SuaConta = ({navigation}) => {
     vaga1,
     vaga2,
     vaga3,
+    linkFoto,
   ) {
     firestore().collection('users').doc(uid).set(
       {
@@ -184,6 +222,7 @@ const SuaConta = ({navigation}) => {
         vaga1: vaga1,
         vaga2: vaga2,
         vaga3: vaga3,
+        foto: linkFoto,
       },
       {merge: true},
     );
@@ -232,23 +271,27 @@ const SuaConta = ({navigation}) => {
           <View>
             <Image
               style={styles.userPicture}
-              source={
-                foto != '' ? {uri: foto} : require('../assets/imgs/user2.png')
-              }
+              source={linkFoto != '' ? {uri: linkFoto.foto} : {uri: foto}}
             />
-            <View
-              style={{
-                flexDirection: 'row',
-                width: vw(50),
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                marginTop: vh(2),
-                marginBottom: vh(4),
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('AlterarFotoPerfil');
               }}>
-              <Icon style={styles.iconeAdicionarFoto} name="camera"></Icon>
-              <Text style={styles.textoAdicionarFoto}>Adicionar foto</Text>
-            </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: vw(50),
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                  marginTop: vh(2),
+                  marginBottom: vh(4),
+                }}>
+                <Icon style={styles.iconeAdicionarFoto} name="camera"></Icon>
+                <Text style={styles.textoAdicionarFoto}>Adicionar foto</Text>
+              </View>
+            </TouchableOpacity>
           </View>
+
           <InputTexto
             changeText={(text) => setNome(text)}
             valor={nome}
@@ -322,16 +365,39 @@ const SuaConta = ({navigation}) => {
           />
           <PurpleButton
             handlePress={() =>
-              atualizarCadastro(
-                nome,
-                cpf,
-                dataNascimento,
-                estado,
-                cidade,
-                vaga1,
-                vaga2,
-                vaga3,
-              )
+              storage()
+                .ref(fotoRefStorage)
+                .getDownloadURL()
+                .then((fotoUrl) => {
+                  atualizarCadastro(
+                    nome,
+                    cpf,
+                    dataNascimento,
+                    estado,
+                    cidade,
+                    vaga1,
+                    vaga2,
+                    vaga3,
+                    fotoUrl,
+                  );
+                })
+                .catch((e) => {
+                  if (e.code === 'storage/object-not-found') {
+                    atualizarCadastro(
+                      nome,
+                      cpf,
+                      dataNascimento,
+                      estado,
+                      cidade,
+                      vaga1,
+                      vaga2,
+                      vaga3,
+                      foto,
+                    );
+                  } else {
+                    alert(e.code);
+                  }
+                })
             }
             style={{marginTop: '15%', marginBottom: '5%'}}
             text={'SALVAR'}

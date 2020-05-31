@@ -8,11 +8,13 @@ import BotaoDetalhes from './botao-detalhes.component';
 const ItemVaga = ({nomeVaga, nomeEmpresa, handlePress}) => {
   return (
     <View style={styles.vagaContainer}>
-      <View>
+      <View style={{width: vw(75)}}>
         <Text style={styles.nomeEmpresa}>{nomeVaga}</Text>
         <Text style={styles.nomeVaga}>{nomeEmpresa.toUpperCase()}</Text>
       </View>
-      <BotaoDetalhes handlePress={handlePress} />
+      <View style={{flex: 1, justifyContent: 'flex-end'}}>
+        <BotaoDetalhes handlePress={handlePress} />
+      </View>
     </View>
   );
 };
