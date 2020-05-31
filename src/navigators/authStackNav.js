@@ -5,6 +5,7 @@ import LoginPage from '../pages/login';
 import EsqueceuSenha from '../pages/esqueceuSenha';
 import CriarConta from '../pages/criarConta';
 import DrawerNav from './drawerNav';
+import CameraViewPerfil from '../pages/cameraViewPerfil';
 
 const AuthStack = createStackNavigator();
 
@@ -35,6 +36,10 @@ const AuthStackNavigator = ({logado}) => {
         options={{title: null, headerTransparent: true}}
         name="CriarConta"
         component={CriarConta}></AuthStack.Screen>
+      <AuthStack.Screen
+        options={{title: null, headerShown: false}}
+        name="TirarFotoPerfil"
+        component={CameraViewPerfil}></AuthStack.Screen>
     </AuthStack.Navigator>
   );
 };

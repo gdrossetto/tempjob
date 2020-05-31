@@ -7,6 +7,17 @@ export function vw(percentage) {
   return Dimensions.get('window').width * (percentage / 100);
 }
 
+export function gerarNomeArquivoStorage(length) {
+  var result = '';
+  var characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
 export const firebaseConfig = {
   apiKey: 'AIzaSyBU_uhgAzADwZld6ZkgOefGIzvwGa42y_A',
   authDomain: 'tempjob-64b1b.firebaseapp.com',

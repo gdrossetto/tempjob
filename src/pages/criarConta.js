@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, Image, TextInput} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import Logo from '../components/logo.component';
 import InputTexto from '../components/input-texto.component';
 import PurpleButton from '../components/purple-button.component';
@@ -8,11 +15,12 @@ import styled from 'styled-components/native';
 import {Icon} from 'native-base';
 import InputPicker from '../components/input-picker.components';
 import NumberFormat from 'react-number-format';
-import {vh, vw} from '../util/Util';
+import {vh, vw, gerarNomeArquivoStorage} from '../util/Util';
 import InputTelefone from '../components/input-telefone.component';
 import {firebase} from '@react-native-firebase/auth';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import InputPickerVagas from '../components/input-picker-vagas.component';
 
 const FotoDiv = styled.View`
@@ -22,7 +30,7 @@ const FotoDiv = styled.View`
   margin-top: 20px;
 `;
 
-const CriarConta = ({navigation}) => {
+const CriarConta = ({navigation, route}) => {
   const [radioCheck, setRadioCheck] = React.useState(false);
   const [estados, setEstados] = React.useState([]);
   const [estado, setEstado] = React.useState('');
@@ -35,9 +43,12 @@ const CriarConta = ({navigation}) => {
   const [senha, setSenha] = React.useState('');
   const [confirmaSenha, setConfirmaSenha] = React.useState('');
   const [vagasPreferidas, setVagas] = React.useState([]);
-  const [vaga1, setVaga1] = React.useState('');
-  const [vaga2, setVaga2] = React.useState('');
-  const [vaga3, setVaga3] = React.useState('');
+  const [vaga1, setVaga1] = React.useState(0);
+  const [vaga2, setVaga2] = React.useState(0);
+  const [vaga3, setVaga3] = React.useState(0);
+  const [fotoRefStorage, setRef] = React.useState('');
+
+  const params = route.params;
 
   if (!firebase.apps.length) {
     try {
@@ -75,6 +86,7 @@ const CriarConta = ({navigation}) => {
     let vagas = [];
     firestore()
       .collection('vagas')
+      .orderBy('nomeVaga', 'asc')
       .get()
       .then((snapshot) => {
         snapshot.forEach((vaga) => {
@@ -101,7 +113,18 @@ const CriarConta = ({navigation}) => {
     console.log(cidades);
   }
 
-  function criarConta(nome, telefone, email, estado, cidade, senha) {
+  function criarConta(
+    nome,
+    telefone,
+    email,
+    estado,
+    cidade,
+    senha,
+    vaga1,
+    vaga2,
+    vaga3,
+    linkFoto,
+  ) {
     auth()
       .createUserWithEmailAndPassword(email, senha)
       .then((response) =>
@@ -112,13 +135,28 @@ const CriarConta = ({navigation}) => {
           email,
           estado,
           cidade,
+          vaga1,
+          vaga2,
+          vaga3,
+          linkFoto,
         ),
       )
       .then(() => navigation.navigate('Login'))
       .catch((e) => alert(e.message));
   }
 
-  function criarUsuarioFirestore(uid, nome, telefone, email, estado, cidade) {
+  function criarUsuarioFirestore(
+    uid,
+    nome,
+    telefone,
+    email,
+    estado,
+    cidade,
+    vaga1,
+    vaga2,
+    vaga3,
+    linkFoto,
+  ) {
     var ref = firestore().collection('users');
     try {
       ref.doc(uid).set({
@@ -127,6 +165,10 @@ const CriarConta = ({navigation}) => {
         telefone: telefone,
         estado: estado,
         cidade: cidade,
+        vaga1: vaga1,
+        vaga2: vaga2,
+        vaga3: vaga3,
+        foto: linkFoto,
       });
     } catch (error) {
       console.error(error.message);
@@ -134,8 +176,28 @@ const CriarConta = ({navigation}) => {
   }
 
   React.useEffect(() => {
+    setRef(gerarNomeArquivoStorage(8));
+  }, []);
+
+  React.useEffect(() => {
+    if (linkFoto != '') {
+      console.log(linkFoto);
+      storage()
+        .ref(fotoRefStorage)
+        .putFile(linkFoto.foto)
+        .then(() => console.log('sucesso'))
+        .catch((e) => console.error(e.message));
+    }
+  }, [linkFoto]);
+
+  React.useEffect(() => {
+    if (params) {
+      setFoto(params);
+    }
+  }, [params]);
+
+  React.useEffect(() => {
     getVagas();
-    console.log(vagasPreferidas);
   }, [vagasPreferidas.length]);
 
   React.useEffect(() => {
@@ -147,14 +209,20 @@ const CriarConta = ({navigation}) => {
       <Logo style={{marginTop: vh(8), marginBottom: vh(4)}} />
       <Text style={styles.acessarContaTexto}>CRIE SUA CONTA</Text>
       <Text style={styles.dadosPessoais}>Dados pessoais</Text>
-      <FotoDiv>
-        <Image
-          style={styles.userPicture}
-          source={require('../assets/imgs/user2.png')}
-        />
-        <Icon style={styles.iconeAdicionarFoto} name="camera"></Icon>
-        <Text style={styles.textoAdicionarFoto}>Adicionar foto</Text>
-      </FotoDiv>
+      <TouchableOpacity onPress={() => navigation.navigate('TirarFotoPerfil')}>
+        <FotoDiv>
+          <Image
+            style={styles.userPicture}
+            source={
+              linkFoto != ''
+                ? {uri: linkFoto.foto}
+                : require('../assets/imgs/user2.png')
+            }
+          />
+          <Icon style={styles.iconeAdicionarFoto} name="camera"></Icon>
+          <Text style={styles.textoAdicionarFoto}>Adicionar foto</Text>
+        </FotoDiv>
+      </TouchableOpacity>
       <InputTexto
         changeText={(text) => setNome(text)}
         style={{marginTop: '5%'}}
@@ -261,7 +329,24 @@ const CriarConta = ({navigation}) => {
             checarSenhaConfirmada() == true &&
             radioCheck == true
           )
-            criarConta(nome, telefone, email, estado, cidade, senha);
+            storage()
+              .ref(fotoRefStorage)
+              .getDownloadURL()
+              .then((fotoUrl) => {
+                criarConta(
+                  nome,
+                  telefone,
+                  email,
+                  estado,
+                  cidade,
+                  senha,
+                  vaga1,
+                  vaga2,
+                  vaga3,
+                  fotoUrl,
+                );
+              });
+          //console.log(`${vaga1},${vaga2},${vaga3}`);
           else if (checarCamposPreenchidos() == false) {
             alert('Preencha todos os campos!');
           } else if (checarSenhaConfirmada() == false) {
@@ -304,6 +389,7 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
     marginLeft: vw(20),
+    borderRadius: 40,
   },
   textoAdicionarFoto: {
     marginTop: 'auto',

@@ -50,7 +50,7 @@ const InputPickerVagas = ({
             return (
               <Picker.Item
                 label={item.nomeVaga ? item.nomeVaga : 'Vaga'}
-                value={item.nomeVaga ? item.nomeVaga : null}
+                value={item.id ? item.id : null}
               />
             );
           })}

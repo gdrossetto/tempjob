@@ -13,6 +13,7 @@ import ItemHistorico from '../components/item-historico.component';
 import {firebase} from '@react-native-firebase/auth';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import InputPickerVagas from '../components/input-picker-vagas.component';
 
 const SuaConta = ({navigation}) => {
   const [aba, setAba] = React.useState(1);
@@ -30,6 +31,26 @@ const SuaConta = ({navigation}) => {
   const [camposSetados, setCamposSetados] = React.useState(false);
   const [userFirestoreRef, setUserRef] = React.useState();
   const [uid, setUid] = React.useState('');
+  const [foto, setFoto] = React.useState('');
+  const [vagas, setVagas] = React.useState([]);
+  const [vaga1, setVaga1] = React.useState();
+  const [vaga2, setVaga2] = React.useState();
+  const [vaga3, setVaga3] = React.useState();
+
+  function getVagas() {
+    let vagas = [];
+    firestore()
+      .collection('vagas')
+      .orderBy('nomeVaga', 'asc')
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((vaga) => {
+          vagas.push(vaga.data());
+        });
+        setVagas(vagas);
+      });
+  }
+
   function getEstados() {
     fetch(
       'https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome',
@@ -46,7 +67,7 @@ const SuaConta = ({navigation}) => {
       .then((responseJson) => setCidades(responseJson));
   }
 
-  var vagas = [
+  var vagasTemplate = [
     {
       vaga: 'Motorista de caminhão',
       nomeEmpresa: 'Ambev',
@@ -120,11 +141,19 @@ const SuaConta = ({navigation}) => {
   }, [user.nome]);
 
   React.useEffect(() => {
+    getVagas();
+  }, [vagas.length]);
+
+  React.useEffect(() => {
     setNome(user.nome);
     setEmail(user.email);
+    setFoto(user.foto);
     setEstado(user.estado);
     setCpf(user.cpf);
-    setDataNascimento(user.dataNasc);
+    setVaga1(user.vaga1),
+      setVaga2(user.vaga2),
+      setVaga3(user.vaga3),
+      setDataNascimento(user.dataNasc);
   }, [user]);
 
   React.useEffect(() => {
@@ -135,7 +164,16 @@ const SuaConta = ({navigation}) => {
     setCidade(user.cidade);
   }, [cidades.length]);
 
-  function atualizarCadastro(nome, cpf, dataNasc, estado, cidade) {
+  function atualizarCadastro(
+    nome,
+    cpf,
+    dataNasc,
+    estado,
+    cidade,
+    vaga1,
+    vaga2,
+    vaga3,
+  ) {
     firestore().collection('users').doc(uid).set(
       {
         nome: nome,
@@ -143,6 +181,9 @@ const SuaConta = ({navigation}) => {
         dataNasc: dataNasc,
         estado: estado,
         cidade: cidade,
+        vaga1: vaga1,
+        vaga2: vaga2,
+        vaga3: vaga3,
       },
       {merge: true},
     );
@@ -191,7 +232,9 @@ const SuaConta = ({navigation}) => {
           <View>
             <Image
               style={styles.userPicture}
-              source={require('../assets/imgs/user2.png')}
+              source={
+                foto != '' ? {uri: foto} : require('../assets/imgs/user2.png')
+              }
             />
             <View
               style={{
@@ -233,13 +276,29 @@ const SuaConta = ({navigation}) => {
             style={{marginTop: '5%'}}
             label={'Data de nascimento'}
           />
-          <InputPicker
-            data={[]}
-            style={{marginTop: '10%'}}
+          <InputPickerVagas
+            data={vagas}
+            style={{marginTop: '5%'}}
             label={'Vagas de interesse'}
+            valor={vaga1}
+            mudaValor={(itemValue, itemIndex) => {
+              setVaga1(itemValue);
+            }}
           />
-          <InputPicker data={[]} />
-          <InputPicker data={[]} />
+          <InputPickerVagas
+            mudaValor={(itemValue, itemIndex) => {
+              setVaga2(itemValue);
+            }}
+            valor={vaga2}
+            data={vagas}
+          />
+          <InputPickerVagas
+            mudaValor={(itemValue, itemIndex) => {
+              setVaga3(itemValue);
+            }}
+            valor={vaga3}
+            data={vagas}
+          />
           <InputPicker
             valor={estado}
             mudaValor={(itemValue, itemIndex) => {
@@ -263,7 +322,16 @@ const SuaConta = ({navigation}) => {
           />
           <PurpleButton
             handlePress={() =>
-              atualizarCadastro(nome, cpf, dataNascimento, estado, cidade)
+              atualizarCadastro(
+                nome,
+                cpf,
+                dataNascimento,
+                estado,
+                cidade,
+                vaga1,
+                vaga2,
+                vaga3,
+              )
             }
             style={{marginTop: '15%', marginBottom: '5%'}}
             text={'SALVAR'}
@@ -284,7 +352,7 @@ const SuaConta = ({navigation}) => {
       ) : (
         <View>
           <Text style={styles.historicoTitle}>Histórico de contratações</Text>
-          {vagas.map((vaga) => {
+          {vagasTemplate.map((vaga) => {
             return (
               <View>
                 <ItemHistorico
@@ -323,6 +391,7 @@ const styles = StyleSheet.create({
     width: 80,
     marginLeft: 'auto',
     marginRight: 'auto',
+    borderRadius: 40,
   },
   textoAdicionarFoto: {
     marginTop: 'auto',
