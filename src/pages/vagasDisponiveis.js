@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, Image, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
 import PageHeader from '../components/page-header.component';
@@ -8,6 +15,7 @@ import {vh, vw} from '../util/Util';
 import {firebase} from '@react-native-firebase/auth';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import {useFocusEffect} from '@react-navigation/native';
 const VagasDisponiveis = ({navigation}) => {
   var vagas2 = [
     {
@@ -62,6 +70,7 @@ const VagasDisponiveis = ({navigation}) => {
 
   const [user, setUser] = React.useState({});
   const [vagas, setVagas] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   function getVagas() {
     let vagas = [];
@@ -74,33 +83,35 @@ const VagasDisponiveis = ({navigation}) => {
           vagas.push(vaga.data());
         });
         setVagas(vagas);
+        setLoading(false);
       });
   }
-
-  React.useEffect(() => {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-
-    auth().onAuthStateChanged((user) => {
-      if (user) {
-        firestore()
-          .collection('users')
-          .doc(user.uid)
-          .get()
-          .then((response) => {
-            setUser(response.data());
-          });
-      } else {
-        console.log('erro');
+  useFocusEffect(
+    React.useCallback(() => {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
       }
-    });
-  }, [user.nome]);
 
-  React.useEffect(() => {
-    getVagas();
-  }, [vagas.length]);
-
+      auth().onAuthStateChanged((user) => {
+        if (user) {
+          firestore()
+            .collection('users')
+            .doc(user.uid)
+            .get()
+            .then((response) => {
+              setUser(response.data());
+            });
+        } else {
+          console.log('erro');
+        }
+      });
+    }, [user.nome]),
+  );
+  useFocusEffect(
+    React.useCallback(() => {
+      getVagas();
+    }, [vagas.length]),
+  );
   return (
     <ScrollView>
       <PageHeader
@@ -115,18 +126,24 @@ const VagasDisponiveis = ({navigation}) => {
         style={{marginTop: vh(3)}}
         horizontal={true}
         data={vagas}
-        renderItem={({item}) => (
-          <Image
-            style={{
-              height: 64,
-              width: 64,
-              marginHorizontal: 10,
-              borderRadius: 32,
-            }}
-            source={{uri: item.fotoEmpresa}}></Image>
-        )}
+        renderItem={({item}) =>
+          user.candidaturas ? (
+            user.candidaturas.indexOf(item.id) != -1 ? (
+              <Image
+                style={{
+                  height: 64,
+                  width: 64,
+                  marginHorizontal: 10,
+                  borderRadius: 32,
+                }}
+                source={{uri: item.fotoEmpresa}}
+              />
+            ) : null
+          ) : null
+        }
         keyExtractor={(item) => item.nomeEmpresa}
       />
+
       <Text
         style={{
           textAlign: 'center',
@@ -136,20 +153,31 @@ const VagasDisponiveis = ({navigation}) => {
         }}>
         VAGAS DISPONÍVEIS
       </Text>
+      {loading ? (
+        <ActivityIndicator
+          style={{marginTop: vh(5)}}
+          size="large"
+          color="#752d91"
+        />
+      ) : null}
       <FlatList
         nestedScrollEnabled
         style={{marginTop: vh(3)}}
         horizontal={false}
         data={vagas}
-        renderItem={({item}) => (
-          <ItemVaga
-            handlePress={() =>
-              navigation.navigate('DetalhesVaga', {vaga: item})
-            }
-            nomeEmpresa={item.nomeEmpresa}
-            nomeVaga={item.nomeVaga}
-          />
-        )}
+        renderItem={({item}) =>
+          user.candidaturas ? (
+            user.candidaturas.indexOf(item.id) == -1 ? (
+              <ItemVaga
+                handlePress={() =>
+                  navigation.navigate('DetalhesVaga', {vaga: item})
+                }
+                nomeEmpresa={item.nomeEmpresa}
+                nomeVaga={item.nomeVaga}
+              />
+            ) : null
+          ) : null
+        }
         keyExtractor={(item) => item.nomeEmpresa}
       />
     </ScrollView>

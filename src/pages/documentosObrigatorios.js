@@ -1,49 +1,43 @@
 import * as React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  Image,
-  FlatList,
-} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import Logo from '../components/logo.component';
 import InputTexto from '../components/input-texto.component';
 import PurpleButton from '../components/purple-button.component';
 import {ScrollView} from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
-import {Container, Header, Content, Picker, Form, Icon} from 'native-base';
+
 import PageHeader from '../components/page-header.component';
-import ItemVaga from '../components/item-vaga';
-import DescricaoItem from '../components/descricao-item.component';
+
 import DocumentoItem from '../components/documento-item.component';
 import {vh, gerarNomeArquivoStorage} from '../util/Util';
 import {useFocusEffect} from '@react-navigation/native';
-import {firebase} from '@react-native-firebase/app';
-import auth from '@react-native-firebase/auth';
+
 import storage from '@react-native-firebase/storage';
-import firestore from '@react-native-firebase/firestore';
+
 import DocumentPicker from 'react-native-document-picker';
 
 const DocumentosObrigatorios = ({navigation, route}) => {
   const {vaga} = route.params;
-  const documentos = route.params.vaga.documentosObrigatorios;
+  const documentos = vaga.documentosObrigatorios;
   const {user} = route.params;
+  const {candidato} = route.params;
 
-  function criaReferenciaDocumento(idVaga, nomeDocumento, nomeUsuario) {
+  function criaReferenciaDocumento(idVaga, nomeDocumento, emailUsuario) {
     return storage().ref(
-      `${idVaga}/${nomeUsuario}/${nomeDocumento}/${gerarNomeArquivoStorage(8)}`,
+      `${idVaga}/${emailUsuario}/${nomeDocumento}/${gerarNomeArquivoStorage(
+        8,
+      )}`,
     );
   }
 
-  async function procuraArquivo(idVaga, nomeDocumento, nomeUsuario) {
+  async function procuraArquivo(idVaga, nomeDocumento, emailUsuario) {
     try {
       console.log('abriu');
       const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
+        type: [DocumentPicker.types.images],
       });
 
-      criaReferenciaDocumento(idVaga, nomeDocumento, nomeUsuario)
+      criaReferenciaDocumento(idVaga, nomeDocumento, emailUsuario)
         .putFile(res.uri)
         .then(() => console.log('Sucesso'))
         .catch((e) => console.error(e.code));
@@ -58,8 +52,13 @@ const DocumentosObrigatorios = ({navigation, route}) => {
     }
   }
 
-  function dizOi() {
-    console.log('OI');
+  function uploadFotoTirada(idVaga, nomeDocumento, emailUsuario, foto) {
+    criaReferenciaDocumento(idVaga, nomeDocumento, emailUsuario)
+      .putFile(foto)
+      .then(() => {
+        console.log('Sucesso');
+      })
+      .catch((e) => console.error(error.code));
   }
 
   useFocusEffect(
@@ -72,8 +71,12 @@ const DocumentosObrigatorios = ({navigation, route}) => {
     <ScrollView>
       <PageHeader
         handlePressMenu={() => navigation.openDrawer()}
-        navigationPopHandler={() => navigation.pop()}
-        userName={user.nome ? user.nome : null}
+        navigationPopHandler={
+          candidato
+            ? () => navigation.pop()
+            : () => navigation.navigate('VagasDisponiveis')
+        }
+        userName={user.nome ? user.nome.split(' ')[0] : ''}
         hasArrowBack={true}
       />
       <Text style={styles.titulo}>DOCUMENTOS OBRIGATÓRIOS</Text>
@@ -81,16 +84,20 @@ const DocumentosObrigatorios = ({navigation, route}) => {
         return (
           <DocumentoItem
             handlePressDocumento={() =>
-              procuraArquivo(vaga.id, documento, user.nome)
+              procuraArquivo(vaga.id, documento, user.email)
             }
             handlePressFoto={() =>
-              navigation.navigate('Camera', {documento: documento})
+              navigation.navigate('Camera', {
+                documento: documento,
+                vaga: vaga,
+                user: user,
+              })
             }
             handlePressHistorico={() =>
               navigation.navigate('HistoricoDocs', {
                 documento: documento,
                 idVaga: vaga.id,
-                nomeUser: user.nome,
+                emailUsuario: user.email,
               })
             }
             tipoDocumento={documento}
@@ -98,6 +105,11 @@ const DocumentosObrigatorios = ({navigation, route}) => {
         );
       })}
       <PurpleButton
+        handlePress={
+          candidato
+            ? () => navigation.pop()
+            : () => navigation.navigate('VagasDisponiveis')
+        }
         text={'ATUALIZAR DOCUMENTOS'}
         style={{marginBottom: vh(6), marginTop: vh(6)}}
       />

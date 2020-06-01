@@ -25,7 +25,7 @@ const AuthStackNavigator = ({logado}) => {
           component={TelaInicial}></AuthStack.Screen>
       )}
       <AuthStack.Screen
-        options={{title: null, headerTransparent: true}}
+        options={{headerShown: false}}
         name="Login"
         component={LoginPage}></AuthStack.Screen>
       <AuthStack.Screen

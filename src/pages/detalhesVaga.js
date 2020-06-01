@@ -27,6 +27,7 @@ import firestore from '@react-native-firebase/firestore';
 const DetalhesVaga = ({navigation, route}) => {
   const {vaga} = route.params;
   const [user, setUser] = React.useState({});
+  const {candidato} = route.params;
 
   function getUser() {
     let authUser = auth().currentUser;
@@ -38,10 +39,26 @@ const DetalhesVaga = ({navigation, route}) => {
       .catch((e) => console.error(e.message));
   }
 
+  function cadastrarVagaFirestore(idVaga) {
+    let authUser = auth().currentUser;
+    let candidaturas = user.candidaturas;
+    console.log(candidaturas);
+    candidaturas.push(idVaga);
+    console.log(candidaturas);
+    firestore()
+      .collection('users')
+      .doc(authUser.uid)
+      .set({candidaturas: candidaturas}, {merge: true})
+      .then(() => criarAlertaCadastro())
+      .catch((e) => {
+        console.log(e.code);
+      });
+  }
+
   useFocusEffect(
     React.useCallback(() => {
       getUser();
-      console.log(user);
+      // console.log(user.candidaturas);
     }, [user.nome]),
   );
 
@@ -56,6 +73,7 @@ const DetalhesVaga = ({navigation, route}) => {
             navigation.navigate('DocumentosObrigatorios', {
               vaga: vaga,
               user: user,
+              candidato: true,
             }),
         },
       ],
@@ -66,8 +84,17 @@ const DetalhesVaga = ({navigation, route}) => {
     <ScrollView>
       <PageHeader
         handlePressMenu={() => navigation.openDrawer()}
-        navigationPopHandler={() => navigation.pop()}
-        userName={'Gabriel Rossetto'}
+        navigationPopHandler={
+          candidato
+            ? () => {
+                navigation.pop();
+              }
+            : () =>
+                navigation.navigate('VagasDisponiveis', {
+                  screen: 'VagasDisponiveis',
+                })
+        }
+        userName={user.nome ? user.nome.split(' ')[0] : ''}
         hasArrowBack={true}
       />
       <Text style={styles.nomeVaga}>{vaga.nomeVaga.toUpperCase()}</Text>
@@ -85,8 +112,17 @@ const DetalhesVaga = ({navigation, route}) => {
       />
       <PurpleButton
         style={{marginTop: vh(2), marginBottom: vh(4), width: vw(60)}}
-        text={'ME CANDIDATAR'}
-        handlePress={() => criarAlertaCadastro()}
+        text={candidato ? 'ATUALIZAR DOCUMENTOS' : 'ME CANDIDATAR'}
+        handlePress={
+          candidato
+            ? () =>
+                navigation.navigate('DocumentosObrigatorios', {
+                  vaga: vaga,
+                  user: user,
+                  candidato: true,
+                })
+            : () => cadastrarVagaFirestore(vaga.id)
+        }
       />
     </ScrollView>
   );

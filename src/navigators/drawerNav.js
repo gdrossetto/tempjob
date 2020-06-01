@@ -3,6 +3,7 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItemList,
+  DrawerItem,
 } from '@react-navigation/drawer';
 import {View, Text, Dimensions} from 'react-native';
 import {Icon} from 'native-base';
@@ -10,6 +11,9 @@ import VagasStackNavigator from './vagasStackNav';
 import VagasDisponiveis from '../pages/vagasDisponiveis';
 import SuaConta from '../pages/suaConta';
 import PerfilStackNavigator from './alterarPerfilStackNav';
+import CandidaturaAndamento from '../pages/candidaturaAndamento';
+import CandidaturasStackNavigator from './candidaturasStackNav';
+import HistoricoContratacoes from '../pages/historicoContratacoes';
 
 function vh(percentage) {
   return Dimensions.get('window').height * (percentage / 100);
@@ -30,31 +34,32 @@ const DrawerNav = () => {
         name="VagasDisponiveis"
         component={VagasStackNavigator}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         options={{title: 'Notificações'}}
         name="Notificações"
         component={VagasDisponiveis}
-      />
+      />*/}
       <Drawer.Screen
         options={{title: 'Candidaturas em Andamento'}}
         name="Candidaturas em Andamento"
-        component={VagasDisponiveis}
+        component={CandidaturasStackNavigator}
       />
       <Drawer.Screen
         options={{title: 'Histórico de contratações'}}
-        name="Histórico de contratações"
-        component={VagasDisponiveis}
+        name="Historico de contratações"
+        component={HistoricoContratacoes}
       />
       <Drawer.Screen
         options={{title: 'Minha Conta'}}
         name="Minha Conta"
         component={PerfilStackNavigator}
       />
+      {/*
       <Drawer.Screen
         options={{title: 'Fale com a Tempjob'}}
         name="Fale com a Tempjob"
         component={VagasDisponiveis}
-      />
+     />*/}
     </Drawer.Navigator>
   );
 };

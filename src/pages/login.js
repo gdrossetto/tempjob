@@ -1,12 +1,19 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import Logo from '../components/logo.component';
 import InputTexto from '../components/input-texto.component';
 import PurpleButton from '../components/purple-button.component';
-import {vh, firebaseConfig} from '../util/Util';
+import {vh, firebaseConfig, vw} from '../util/Util';
 import {firebase} from '@react-native-firebase/auth';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import {Icon} from 'native-base';
 
 const LoginPage = ({navigation}) => {
   const [email, setEmail] = React.useState('');
@@ -39,6 +46,11 @@ const LoginPage = ({navigation}) => {
 
   return (
     <View>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('telaInicial')}
+        style={{borderRadius: 36 / 2, marginLeft: vw(5), marginTop: vh(2)}}>
+        <Icon style={styles.arrowBack} name="arrow-back"></Icon>
+      </TouchableOpacity>
       <Logo style={{marginTop: vh(8), marginBottom: vh(4)}} />
       <Text style={styles.acessarContaTexto}>ACESSE SUA CONTA</Text>
       <InputTexto

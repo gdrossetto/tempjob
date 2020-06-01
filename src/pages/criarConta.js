@@ -169,6 +169,7 @@ const CriarConta = ({navigation, route}) => {
         vaga2: vaga2,
         vaga3: vaga3,
         foto: linkFoto,
+        candidaturas: [],
       });
     } catch (error) {
       console.error(error.message);

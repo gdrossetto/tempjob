@@ -23,15 +23,15 @@ import PurpleButton from '../components/purple-button.component';
 const HistoricoDocs = ({navigation, route}) => {
   const {idVaga} = route.params;
   const {documento} = route.params;
-  const {nomeUser} = route.params;
+  const {emailUsuario} = route.params;
   const [listaDocs, setLista] = React.useState([]);
   const [lista, setList] = React.useState([]);
   var listaDocumentos = [];
 
-  function getHistoricoDocs(idVaga, nomeUser, documento) {
+  function getHistoricoDocs(idVaga, emailUsuario, documento) {
     if (listaDocs.length <= 0) {
       storage()
-        .ref(`${idVaga}/${nomeUser}/${documento}`)
+        .ref(`${idVaga}/${emailUsuario}/${documento}`)
         .listAll()
         .then((list) => {
           setList(list);
@@ -46,7 +46,7 @@ const HistoricoDocs = ({navigation, route}) => {
   }
 
   React.useEffect(() => {
-    getHistoricoDocs(idVaga, nomeUser, documento);
+    getHistoricoDocs(idVaga, emailUsuario, documento);
     console.log(listaDocs);
   }, [listaDocs]);
 

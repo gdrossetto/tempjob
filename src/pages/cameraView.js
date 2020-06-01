@@ -1,13 +1,51 @@
 import React from 'react';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, StyleSheet, Text, View, Alert} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import CameraOverlay from '../components/camera-overlay.component';
 import {Icon} from 'native-base';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {vh} from '../util/Util';
+import {vh, gerarNomeArquivoStorage} from '../util/Util';
+import storage from '@react-native-firebase/storage';
 
 const CameraView = ({navigation, route}) => {
   const {documento} = route.params;
+  const {vaga} = route.params;
+  const {user} = route.params;
+
+  let camera;
+
+  async function takePicture() {
+    if (camera) {
+      const options = {quality: 0.5, base64: true};
+      const data = await camera.takePictureAsync(options);
+      if (data) {
+        uploadFotoTirada(vaga.id, documento, user.email, data.uri);
+      }
+    }
+  }
+
+  function criaReferenciaDocumento(idVaga, nomeDocumento, emailUsuario) {
+    return storage().ref(
+      `${idVaga}/${emailUsuario}/${nomeDocumento}/${gerarNomeArquivoStorage(
+        8,
+      )}`,
+    );
+  }
+
+  function uploadFotoTirada(idVaga, nomeDocumento, emailUsuario, foto) {
+    Alert.alert('Aguarde', 'Sua imagem está sendo enviada...');
+    criaReferenciaDocumento(idVaga, nomeDocumento, emailUsuario)
+      .putFile(foto)
+      .then(() => {
+        Alert.alert('Sucesso', 'Sua imagem foi enviada com sucesso!');
+        navigation.push('DocumentosObrigatorios', {
+          tipoDocumento: documento,
+          vaga: vaga,
+          user: user,
+        });
+      })
+      .catch((e) => alert(e.code));
+  }
 
   return (
     <View style={styles.container}>
@@ -40,6 +78,7 @@ const CameraView = ({navigation, route}) => {
           </Text>
         </View>
         <TouchableOpacity
+          onPress={() => takePicture()}
           style={{
             backgroundColor: 'white',
             height: 64,
