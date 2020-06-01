@@ -8,6 +8,7 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import Logo from '../components/logo.component';
 import InputTexto from '../components/input-texto.component';
 import PurpleButton from '../components/purple-button.component';
@@ -18,9 +19,31 @@ import PageHeader from '../components/page-header.component';
 import ItemVaga from '../components/item-vaga';
 import DescricaoItem from '../components/descricao-item.component';
 import {vh, vw} from '../util/Util';
+import {firebase} from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
+import firestore from '@react-native-firebase/firestore';
 
 const DetalhesVaga = ({navigation, route}) => {
   const {vaga} = route.params;
+  const [user, setUser] = React.useState({});
+
+  function getUser() {
+    let authUser = auth().currentUser;
+    firestore()
+      .collection('users')
+      .doc(authUser.uid)
+      .get()
+      .then((firestoreUser) => setUser(firestoreUser.data()))
+      .catch((e) => console.error(e.message));
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getUser();
+      console.log(user);
+    }, [user.nome]),
+  );
 
   const criarAlertaCadastro = () =>
     Alert.alert(
@@ -31,7 +54,8 @@ const DetalhesVaga = ({navigation, route}) => {
           text: 'OK',
           onPress: () =>
             navigation.navigate('DocumentosObrigatorios', {
-              documentos: vaga.documentosObrigatorios,
+              vaga: vaga,
+              user: user,
             }),
         },
       ],

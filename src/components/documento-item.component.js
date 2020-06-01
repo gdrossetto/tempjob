@@ -13,12 +13,14 @@ const DocumentoItem = ({
   tipoDocumento,
   handlePressFoto,
   handlePressDocumento,
+  handlePressHistorico,
 }) => {
   return (
     <View style={styles.documentoContainer}>
       <Text style={styles.tipoDocumento}>{tipoDocumento}</Text>
       <View style={styles.buttonsContainer}>
         <PurpleButton
+          handlePress={handlePressDocumento}
           style={{
             marginLeft: 0,
             marginRight: 0,
@@ -36,7 +38,7 @@ const DocumentoItem = ({
           <Text style={styles.iconLabel}>Tirar foto</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={handlePressDocumento}
+          onPress={handlePressHistorico}
           style={styles.iconContainer}>
           <Icon style={styles.icon} name={'clock'} />
           <Text style={styles.iconLabel}>Histórico docs</Text>

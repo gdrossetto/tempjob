@@ -4,6 +4,7 @@ import VagasDisponiveis from '../pages/vagasDisponiveis';
 import DetalhesVaga from '../pages/detalhesVaga';
 import DocumentosObrigatorios from '../pages/documentosObrigatorios';
 import CameraView from '../pages/cameraView';
+import HistoricoDocs from '../pages/historicoDocs';
 
 const VagasStack = createStackNavigator();
 
@@ -24,6 +25,11 @@ const VagasStackNavigator = () => {
         options={{headerShown: false}}
         name="DocumentosObrigatorios"
         component={DocumentosObrigatorios}
+      />
+      <VagasStack.Screen
+        options={{headerShown: false}}
+        name="HistoricoDocs"
+        component={HistoricoDocs}
       />
       <VagasStack.Screen
         options={{headerShown: false}}
